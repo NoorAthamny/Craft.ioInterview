@@ -18,7 +18,8 @@ function App() {
 
   const openModel = (selectMode ,id) => {
     setMode(selectMode);
-    setSelectedSquare(id)
+    const squareData = square.find((sq) => sq.id === id);
+    setSelectedSquare(squareData || null);
     setAddIsOpen(true);
   };
 
@@ -94,12 +95,13 @@ function App() {
           addSqaure={handleAddSquare}
           mode={mode}
           closeModal={closeModal}
+          selectedSquare={selectedSquare}
         />
       )}
       {
         editDeleteModal && (
           <EditDeleteModal
-          removeSquare={handleRemoveSquare}
+          handleRemoveSquare={handleRemoveSquare}
           selectedSquare={selectedSquare}
           closeEditDeleteModal={closeEditDeleteModal}
           openMove={(id) => openModel("move" , id)}

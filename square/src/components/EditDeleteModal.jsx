@@ -3,7 +3,7 @@
 const EditDeleteModal = ({  openMove,
     closeEditDeleteModal,
     selectedSquare,
-    removeSquare, }) => {
+    handleRemoveSquare, }) => {
   return (
     <div className="flex justify-center items-center gap-2 flex-col absolute  h-48 w-48 p-6 bg-slate-300" style={{
         top: "50%",
@@ -23,7 +23,7 @@ const EditDeleteModal = ({  openMove,
         </button>
         <button
           onClick={() => {
-            removeSquare(selectedSquare)
+            handleRemoveSquare(selectedSquare)
             closeEditDeleteModal();
           }}
           className="bg-slate-500 px-4 py-2 cursor-pointer">

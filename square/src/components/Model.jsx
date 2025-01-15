@@ -1,8 +1,15 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 
-
-const Model = ({ closeModal, mode , addSqaure , removeSquare ,moveSquare ,square  }) => {
+const Model = ({
+  closeModal,
+  mode,
+  addSqaure,
+  removeSquare,
+  moveSquare,
+  square,
+  selectedSquare,
+}) => {
   const [id, setId] = useState("");
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
@@ -15,31 +22,38 @@ const Model = ({ closeModal, mode , addSqaure , removeSquare ,moveSquare ,square
       setId(String(Math.floor(Math.random() * 1000) + 1));
     }
   }, [mode]);
-  
+
+  useEffect(() => {
+    if (mode === "move" && selectedSquare) {
+      setId(selectedSquare.id);
+      setX(selectedSquare.x);
+      setY(selectedSquare.y);
+    }
+  }, [mode, selectedSquare]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if(mode === 'add') {
-        const idExists = square.some((sq) => sq.id === id);
-        if (idExists || id === '') {
-          setError("The ID already exists.");
-          return;
-        }
-    
-        addSqaure({
-            id,
-            x: parseInt(x, 10),
-            y: parseInt(y, 10),
-            size: parseInt(size, 10),
-            color,
-          });
-    } else if (mode === "remove") {
+    if (mode === "add") {
+      const idExists = square.some((sq) => sq.id === id);
+      if (idExists || id === "") {
+        setError("The ID already exists.");
+        return;
+      }
 
-        removeSquare(id);
-    } else if(mode ==='move') {
-        moveSquare(id ,x,y)
+      addSqaure({
+        id,
+        x: parseInt(x, 10),
+        y: parseInt(y, 10),
+        size: parseInt(size, 10),
+        color,
+      });
+    } else if (mode === "remove") {
+      removeSquare(id);
+    } else if (mode === "move") {
+      moveSquare(id, x, y);
     }
-  
+
     closeModal();
     // console.log(id, x, y, size, color);
   };
@@ -48,7 +62,7 @@ const Model = ({ closeModal, mode , addSqaure , removeSquare ,moveSquare ,square
     <form
       onSubmit={handleSubmit}
       className="bg-slate-400 h-auto w-auto absolute top-52 left-52 shadow-md p-5 flex flex-col gap-5">
-         {error && <div className="text-red-500">{error}</div>}
+      {error && <div className="text-red-500">{error}</div>}
       {mode === "add" && (
         <>
           <div className="flex flex-col">
@@ -118,7 +132,6 @@ const Model = ({ closeModal, mode , addSqaure , removeSquare ,moveSquare ,square
 
       {mode === "move" && (
         <>
-    
           <div className="flex flex-col">
             <label htmlFor="xPosition">x: </label>
             <input
@@ -153,10 +166,8 @@ const Model = ({ closeModal, mode , addSqaure , removeSquare ,moveSquare ,square
         </>
       )}
 
-
-      {mode === 'remove' && (
+      {mode === "remove" && (
         <>
-        
           <button className="bg-white" type="submit">
             Ok
           </button>
@@ -170,9 +181,6 @@ const Model = ({ closeModal, mode , addSqaure , removeSquare ,moveSquare ,square
           </button>
         </>
       )}
-
-
-
     </form>
   );
 };
